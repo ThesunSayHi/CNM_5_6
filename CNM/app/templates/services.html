@@ -1,0 +1,47 @@
+{% extends 'home.html' %} 
+{% load static %} 
+{% block content %}
+<section class="services" id="services">
+    <div class="max-width">
+        <h2 class="title">Services Price List</h2>
+        <div class="serv-content">
+            <div class="card">
+                <div class="box">
+                    <i class="fas fa-file-alt"></i>
+                    <div class="text">REGULAR News</div>
+                    <p>Description of advantages: </p>
+                    <p>Reach customers quite well.</p>
+                    <p>Appears after VIP news.</p>
+                    <p>Title: Blue</p>
+                    <p class="price">Price: 2000vnd/Day</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="box">
+                    <i class="fas fa-star"></i>
+                    <div class="text">VIP News</div>
+                    <p>Description of advantages: </p>
+                    <p>5x more views than regular news.</p>
+                    <p>Appears after Pro news.</p>
+                    <p>Title: Orange</p>
+                    <p class="price">Price: 5000vnd/Day</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="box">
+                    <i class="fas fa-trophy"></i>
+                    <div class="text">PRO News</div>
+                    <p>Description of advantages: </p>
+                    <P>10x more views than regular news.</P>
+                    <p>Appears at the top of the page.</p>
+                    <p>Title: Red</p>
+                    <p class="price">Price: 10000vnd/Day</p>
+                </div>
+            </div>
+            <div class="register-prompt">
+                <p>Please register an account to connect our service !</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

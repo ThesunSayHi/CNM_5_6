@@ -1,0 +1,101 @@
+{% extends 'home.html' %}
+{% load static %}
+{% block styles %}
+<style>
+    /* Navbar styles */
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 999;
+    }
+
+    /* Body padding */
+    body {
+        padding-top: 100px;
+    }
+
+    /* Form styles */
+    .login-form {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-form h4 {
+        font-family: 'Ubuntu', sans-serif;
+        color: #333333;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .login-form form {
+        font-family: 'Ubuntu', sans-serif;
+    }
+
+    .login-form input[type="text"],
+    .login-form input[type="email"],
+    .login-form input[type="password"],
+    .login-form input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #cccccc;
+        border-radius: 5px;
+        font-family: 'Ubuntu', sans-serif;
+    }
+
+    .login-form input[type="submit"] {
+        background-color: #4caf50;
+        color: #ffffff;
+        cursor: pointer;
+    }
+
+    .login-form input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+
+    .login-form .text-center {
+        font-family: 'Ubuntu', sans-serif;
+        color: #333333;
+        margin-top: 20px;
+    }
+
+    .login-form .text-center a {
+        color: #e53935;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="col-lg-5 shadow mx-auto p-0">
+    <div class="p-4 login-form">
+        <h4>Login</h4>
+        <hr>
+        <form action="" method="post" novalidate class="shadow p-5">
+            {% csrf_token %}
+            {% for fm in form %}
+            {{fm.label_tag}}
+            {{fm}}
+            <small class="text-danger">{{fm.error|striptags}}</small>
+            <br>
+            {% endfor %}
+            <input type="submit" value="Submit" class="btn btn-success">
+            <br>
+            <small><a href="#">Quên mật khẩu?</a></small>
+            <div class="text-center text-dark fw-bold">
+                <small>Do not have an account? <a href="{% url 'signup' %}" class="text-danger">SignUp</a></small>
+            </div>
+            {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+            <p class="alert alert-danger my-3">{{error}}</p>
+            {% endfor %}
+            {% endif %}
+        </form>
+    </div>
+</div>
+{% endblock %}

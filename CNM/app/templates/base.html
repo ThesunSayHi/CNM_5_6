@@ -1,0 +1,15 @@
+{% extends 'home.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/index.css'%}">
+<script src="{% static 'js/index.js' %}"></script>
+<section class="home" id="home">
+    <div class="max-width">
+        <div class="home-content">
+            <div class="text-1">Hello, Welcome to</div>
+            <div class="text-2">Room Sharing Website</div>
+            <a href="{% url 'login' %}">Start Now</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
