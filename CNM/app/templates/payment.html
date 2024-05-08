@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <h2>VPBank</h2>
+    <img src="{% static 'images\104d4f0b-3b32-4a41-9a0f-a91b11bfcfa2.jpg' %}" alt="QR Code 2">
+    <h2>Momo</h2>
+    <img src="{% static 'images\c06a8403-527a-4359-b285-74fafc43ee37.jpg' %}" alt="QR Code 1">
+    <div>
+        <h3>Mô tả nội dung chuyển khoản:</h3>
+        <p>
+            Nạp tiền cho khách hàng XYZ vào tài khoản số [số tài khoản của bạn]
+            với thông điệp: [nội dung bạn muốn ghi chú]
+        </p>
+    </div>
+{% endblock %}

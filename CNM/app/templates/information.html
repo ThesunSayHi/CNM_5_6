@@ -1,5 +1,5 @@
-{% extends 'home.html' %} 
-{% load static %} 
+{% extends 'home.html' %}
+{% load static %}
 {% block content %}
 <style>
     .navbar {
@@ -12,7 +12,8 @@
 
     /* Body padding */
     body {
-        padding-top: 100px;
+        background-color: #f8f9fa;
+        font-family: 'Poppins', sans-serif;
     }
 
     .no-profile {
@@ -51,44 +52,114 @@
     .no-profile .add-profile-btn:hover {
         background-color: #0056b3;
     }
+
+    .profile-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 400px;
+        width: 100%;
+        border-radius: 25px;
+        padding: 30px;
+        border: 1px solid #ddd;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        margin: 50px auto;
+    }
+
+    .image {
+        position: relative;
+        height: 150px;
+        width: 150px;
+    }
+
+    .image .profile-pic {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .data {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 15px;
+    }
+
+    .row {
+        display: flex;
+        align-items: center;
+        margin-top: 30px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .row .info {
+        text-align: center;
+        padding: 10px 20px;
+        margin: 5px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .buttons {
+        display: flex;
+        align-items: center;
+        margin-top: 30px;
+    }
+
+    .buttons .btn {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 10px;
+        padding: 8px 25px;
+        border-radius: 25px;
+        font-size: 16px;
+        white-space: nowrap;
+        background: linear-gradient(to right, #e20d0d, #b71818);
+        transition: background 0.3s ease;
+    }
+
+    .buttons .btn:hover {
+        background: linear-gradient(to left, #e20d0d, #b71818);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    }
 </style>
-<link rel="stylesheet" href="{% static 'css/profile.css'%}">
+
 <section class="main">
     {% if profiles %}
+    {% for profile in profiles %}
     <div class="profile-card">
-        {% for profile in profiles %}
         <div class="image">
-            <img src="{{ profile.image.url }}" alt="" class="profile-pic">
+            <img src="{{ profile.ImageURL }}" alt="" class="profile-pic">
         </div>
         <div class="data">
-            <h2>Username</h2>
-            <span>{{ profile.full_name }}</span>
+            <h2>{{ profile.user }}</h2>
         </div>
         <div class="row">
             <div class="info">
-                <h3>Phone</h3>
-                <span>{{ profile.phone }}</span>
+                <span>👤 {{ profile.full_name }}</span>
             </div>
             <div class="info">
-                <h3>Email</h3>
-                <span>{{ profile.email }}</span>
+                <span>📳 Phone: {{ profile.phone }}</span>
             </div>
             <div class="info">
-                <h3>Posts</h3>
-                <span>209</span>
+                <span>📧 {{ profile.email }}</span>
             </div>
         </div>
         <div class="buttons">
-            <a href="{{ profile.facebook }}" class="btn">Facebook</a>
             <a href="{% url 'updateinfor' pk=profile.id %}" class="btn">Update</a>
         </div>
-        {% endfor %}
     </div>
+    {% endfor %}
     {% else %}
     <div class="no-profile">
         <h3>Welcome <span class="text-capitalize">{{ request.user }}</span></h3>
         <h3>Please update your Profile!</h3>
-        <a href="{% url 'profile' %}" class="add-profile-btn">StartNow</a>
+        <a href="{% url 'profile' %}" class="add-profile-btn">Start Now</a>
     </div>
     {% endif %}
 </section>

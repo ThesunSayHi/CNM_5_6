@@ -14,6 +14,8 @@ def home(request):
 def about(request):
     return render(request, "about.html")
 
+def payment(request):
+    return render(request, "payment.html")
 
 def services(request):
     return render(request, "services.html")
@@ -76,10 +78,6 @@ def signup(request):
         if form.is_valid():
             form.save()
             return redirect('login')
-            # if user is not None:
-            #     return redirect('login')
-        else:
-            messages.warning(request,'Đăng ký không thành công !')
         return render(request, 'signup.html', context=context)
     
 def Post_Room(request):
@@ -90,9 +88,10 @@ def Post_Room(request):
 
 def post_detail_view(request, pk):
     post = Posts.objects.get(pk=pk)
-
+    profile = get_object_or_404(Profile, user=post.posted_by)
     context = {
         'post': post,
+        'profile': profile,
     }
     return render(request, 'post_detail.html', context)
 
@@ -101,10 +100,6 @@ def user_logout(request):
     return home(request)
 
 
-def use_directory_paths(instance, filename):
-    ext = filename.split('.')[-1]
-    filename = "%s.%s" % (instance.id, filename)
-    return "user_{0}/{1}".format(instance.id, filename)
 class ProfileViews(View):
     def get(self, request):
         form = ProfileForm()
@@ -119,20 +114,12 @@ class ProfileViews(View):
             phone = form.cleaned_data['phone']
             gender = form.cleaned_data['gender']
             facebook = form.cleaned_data['facebook']
-            image = form.cleaned_data['image']
-
-            if hasattr(image, 'name'):
-                image_name = image.name
-            else:
-                image_name = image
-
-            image_path = use_directory_paths(user, image_name)
-            reg = Profile(user=user, full_name=full_name, email=email, phone=phone, gender=gender, facebook=facebook, image=image_path)
+            if 'image' in request.FILES:
+                image = form.cleaned_data['image']
+            reg = Profile(user=user, full_name=full_name, email=email, phone=phone, gender=gender, facebook=facebook, image=image)
             reg.save()
-            messages.success(request, 'Lưu Thành Công')
             return redirect('information')
         else:
-            messages.warning(request, "Lỗi !!!!")
             return render(request, 'profile.html', {'form': form})
 def information(request):
     profiles =  Profile.objects.filter(user=request.user)
@@ -140,23 +127,27 @@ def information(request):
 
 class updateInfor(View):
     def get(self, request, pk):
-        add = Profile.objects.get(pk=pk)
-        form = ProfileForm(instance=add)
-        return render(request,'updateinfor.html', locals())
-    def post(selff,request,pk):
-        form =  ProfileForm(request.POST)
+        profile = get_object_or_404(Profile, pk=pk)
+        form = ProfileForm(instance=profile)
+        return render(request, 'updateinfor.html', {'form': form})
+
+    def post(self, request, pk):
+        profile = get_object_or_404(Profile, pk=pk)
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            add = Profile.objects.get(pk=pk)
-            add.full_name = form.cleaned_data['full_name']
-            add.email = form.cleaned_data['email']
-            add.phone = form.cleaned_data['phone']
-            add.gender = form.cleaned_data['gender']
-            add.facebook = form.cleaned_data['facebook']
-            add.image = form.cleaned_data['image']
-            add.save()
-            messages.success(request,'Lưu Thành Công')
-        else:
-            messages.warning(request,"Lỗi !!!!")
+            if form.cleaned_data['full_name'] != '':
+                profile.full_name = form.cleaned_data['full_name']
+            if form.cleaned_data['email'] != '':
+                profile.email = form.cleaned_data['email']
+            if form.cleaned_data['phone'] != '':
+                profile.phone = form.cleaned_data['phone']
+            if form.cleaned_data['gender'] != '':
+                profile.gender = form.cleaned_data['gender']
+            if form.cleaned_data['facebook'] != '':
+                profile.facebook = form.cleaned_data['facebook']
+            if form.cleaned_data.get('image'):
+                profile.image = form.cleaned_data['image']
+            profile.save()
         return redirect('information')
 
 
@@ -166,7 +157,26 @@ def create_post(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.posted_by = request.user
+            user = request.user
+            post_type = form.cleaned_data.get('post_type')
+            if post_type == Posts.NORMAL and user.wallet.total_balance< 5000:
+                return redirect('payment')
+            elif post_type == Posts.VIP and user.wallet.total_balance < 7000:
+                return redirect('payment')
+            elif post_type == Posts.PRO and user.wallet.total_balance < 10000:
+                return redirect('payment')
             try:
+                wallet = user.wallet
+                if post_type == Posts.NORMAL:
+                    wallet.total_balance -= 5000
+                    wallet.total_expenses += 5000
+                elif post_type == Posts.VIP:
+                    wallet.total_balance -= 7000
+                    wallet.total_expenses += 7000
+                elif post_type == Posts.PRO:
+                    wallet.total_balance -= 10000
+                    wallet.total_expenses += 10000
+                wallet.save()
                 post.save()
                 print("Post saved successfully")
                 return redirect('room')
@@ -177,3 +187,42 @@ def create_post(request):
     else:
         form = PostForm()
     return render(request, 'addroom.html', {'form': form})
+
+from django.db.models import Q
+from django.http import JsonResponse
+def search_posts(request):
+    query = request.GET.get('q')
+    if query:
+        posts = Posts.objects.filter(
+            Q(title__icontains=query) |
+            Q(description__icontains=query) |
+            Q(address__icontains=query) |
+            Q(post_type__icontains=query)
+        )
+    else:
+        posts = Posts.objects.all()
+
+    data = [
+        {
+            'title': post.title,
+            'description': post.description,
+            'address': post.address,
+            'price': float(post.price),
+            'image_url': post.ImageURL,
+        }
+        for post in posts
+    ]
+
+    return JsonResponse(data, safe=False)
+
+
+def wallet_view(request):
+    user_wallet = Wallet.objects.get(user=request.user)
+    return render(request, 'wallet.html', {'wallet': user_wallet})
+
+
+def YourPost(request):
+    user_posts = Posts.objects.filter(posted_by=request.user)
+    sorted_posts = sorted(user_posts, key=lambda x: (0 if x.post_type == 'Pro' else (1 if x.post_type == 'VIP' else 2)))
+    context = {'posts': sorted_posts}
+    return render(request, 'yourpost.html', context)

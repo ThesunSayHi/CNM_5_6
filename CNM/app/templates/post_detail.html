@@ -1,71 +1,203 @@
 {% extends 'home.html' %}
 {% load static %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/detail.css'%}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
-<section class="wrapper-detail">
-    <i class="fa-solid fa-arrow-left button" id="prev"></i>
-    <div class="image-container">
-      <div class="carousel">
-        {% if post.images1 %}
-        <img src="{{ post.images1.url }}" alt="" />
-        {% endif %}
-        {% if post.images2 %}
-        <img src="{{ post.images2.url }}" alt="" />
-        {% endif %}
-        {% if post.images3 %}
-        <img src="{{ post.images3.url }}" alt="" />
-        {% endif %}
-        {% if post.images4 %}
-        <img src="{{ post.images4.url }}" alt="" />
-        {% endif %}
-        {% if post.images5 %}
-        <img src="{{ post.images5.url }}" alt="" />
-        {% endif %}
-      </div>
-      <i class="fa-solid fa-arrow-right button" id="next"></i>
-    </div>
-  </section>
-    <div class="container my-5">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="post-details">
-                    <h2>{{ post.title }}</h2>
-                    <p>Posted by: {{ post.posted_by.username }}</p>
-                    <p>Price: {{ post.price }} VND</p>
-                    <p>Address: {{ post.address }}</p>
-                    <p>Available: {{ post.available|yesno:"Yes,No" }}</p>
-                    <p>Post Type: {{ post.get_post_type_display }}</p>
-                    <p>Created at: {{ post.created_at }}</p>
-                    <div class="description">
-                        <h4>Description</h4>
-                        <p>{{ post.description }}</p>
-                    </div>
-                </div>
-            </div>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
+
+<div class="container">
+  <div class="content">
+    <section class="wrapper">
+      <i class="fa-solid fa-arrow-left button" id="prev"></i>
+      <div class="image-container">
+        <div class="carousel">
+          {% if post.images1 %}
+          <div class="slide"><img src="{{ post.images1.url }}" alt=""></div>
+          {% endif %}
+          {% if post.images2 %}
+          <div class="slide"><img src="{{ post.images2.url }}" alt=""></div>
+          {% endif %}
+          {% if post.images3 %}
+          <div class="slide"><img src="{{ post.images3.url }}" alt=""></div>
+          {% endif %}
+          {% if post.images4 %}
+          <div class="slide"><img src="{{ post.images4.url }}" alt=""></div>
+          {% endif %}
+          {% if post.images5 %}
+          <div class="slide"><img src="{{ post.images5.url }}" alt=""></div>
+          {% endif %}
         </div>
+        <i class="fa-solid fa-arrow-right button" id="next"></i>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="container my-6">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="post-details">
+        <h2>{{ post.title }}</h2>
+        <p>Posted by: {{ post.posted_by.username }}</p>
+        <p>Price: {{ post.price }} VND</p>
+        <p>Address: {{ post.address }}</p>
+        <p>Available: {{ post.available|yesno:"Yes,No" }}</p>
+        <p>Post Type: {{ post.get_post_type_display }}</p>
+        <p>Created at: {{ post.created_at }}</p>
+        <div class="description">
+          <h4>Description</h4>
+          <p>{{ post.description }}</p>
+        </div>
+        <div class="description">
+          <h4>Contact Info</h4>
+          {% if profile %}
+              <p>Full Name: {{ profile.full_name }}</p>
+              <p>📧: {{ profile.email }}</p>
+              <p>☎: {{ profile.phone }}</p>
+              <p>👥: {{ profile.get_gender_display }}</p>
+              <p>Facebook: {{profile.facebook }}</p>
+          {% else %}
+              <p>No profile information available.</p>
+          {% endif %}
+      </div>
+      </div>
     </div>
-  <script>
-    const carousel = document.querySelector(".carousel"),
-      images = document.querySelectorAll("img"),
-      buttons = document.querySelectorAll(".button");
-  
-    let imageIndex = 0;
-  
-    const slideImage = (index) => {
-      imageIndex = index;
-      carousel.style.transform = `translate(-${index * 100}%)`;
-    };
-  
-    const updateClick = (e) => {
-      if (e.target.id === "next") {
-        imageIndex = (imageIndex + 1) % images.length;
-      } else if (e.target.id === "prev") {
-        imageIndex = (imageIndex - 1 + images.length) % images.length;
-      }
-      slideImage(imageIndex);
-    };
-  
-    buttons.forEach((button) => button.addEventListener("click", updateClick));
-  </script>
+  </div>
+</div>
+
+<style>
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+  }
+  body {
+    padding-top: 100px;
+    font-family: 'Ubuntu', sans-serif;
+  }
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: rgba(223, 18, 18, 0.1);
+  }
+  .content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+  }
+  .footer-container {
+    position: static;
+  }
+  .wrapper {
+    display: flex;
+    max-width: 900px;
+    width: 100%;
+    height: 500px;
+    background: #fff;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 12px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  }
+  .wrapper i.button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 36px;
+    width: 36px;
+    background-color: #343f4f;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 36px;
+    color: #fff;
+    font-size: 15px;
+    transition: all 0.3s linear;
+    z-index: 100;
+    cursor: pointer;
+  }
+  i.button:active {
+    transform: scale(0.94) translateY(-50%);
+  }
+  i#prev {
+    left: 25px;
+  }
+  i#next {
+    right: 25px;
+  }
+  .image-container {
+    height: 100%;
+    max-width: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+  .image-container .carousel {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    transition: all 0.4s ease;
+  }
+  .carousel .slide {
+    flex: 0 0 100%;
+  }
+  .carousel img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+  }
+  .post-details {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  }
+  .post-details h2 {
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .post-details p {
+    margin-bottom: 5px;
+  }
+  .description {
+    margin-top: 20px;
+  }
+  .description h4 {
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+</style>
+<script>
+  const wrapper = document.querySelector(".wrapper"),
+  carousel = document.querySelector(".carousel"),
+  images = document.querySelectorAll(".slide"),
+  buttons = document.querySelectorAll(".button");
+let imageIndex = 0,
+  intervalId;
+const autoSlide = () => {
+  intervalId = setInterval(() => slideImage(++imageIndex), 2000);
+};
+autoSlide();
+const slideImage = () => {
+  imageIndex = imageIndex === images.length ? 0 : imageIndex < 0 ? images.length - 1 : imageIndex;
+  carousel.style.transform = `translateX(-${imageIndex * 100}%)`;
+};
+const updateClick = (e) => {
+  clearInterval(intervalId);
+  imageIndex += e.target.id === "next" ? 1 : -1;
+  slideImage(imageIndex);
+  autoSlide();
+};
+buttons.forEach((button) => button.addEventListener("click", updateClick));
+wrapper.addEventListener("mouseover", () => clearInterval(intervalId));
+wrapper.addEventListener("mouseleave", autoSlide);
+</script>
 {% endblock %}

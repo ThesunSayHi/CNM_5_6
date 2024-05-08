@@ -69,28 +69,122 @@
         transform: translateY(-2px);
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     }
-</style>
+    .search-box {
+    display: flex;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 10px;
+    border-radius: 30px;
+    background-color: #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
 
+.search-box:hover {
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+}
+
+.search-box input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    background-color: transparent;
+}
+
+.search-box button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    outline: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-box button:hover {
+    background-color: #0056b3;
+}
+</style>
+<form action="#" method="get">
+    {% csrf_token %}
+    <div class="search-box">
+        <input type="text" name="q" placeholder="Search here..." value="{{ query }}">
+        <button type="submit">Search</button>
+    </div>
+</form>
 <div class="container mt-5">
-    <div class="row">
-        {% if post|length == 0 %}
-        <div class="col-12">
-            <h3 class="text-center">Hiện tại không có bài đăng nào!</h3>
-        </div>
-        {% endif %}
-        {% for p in post %}
-        <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card h-100">
-                <img class="card-img-top img-fluid" src="{{ p.ImageURL }}" alt="{{ p.title }}">
-                <div class="card-body">
-                    <h5 class="card-title">{{ p.title }}</h5>
-                    <p class="card-text">Price: {{ p.price|floatformat:3 }} VNĐ</p>
-                    <p class="card-text">Address: {{ p.address }}</p>
-                    <a href="{% url 'post_detail' p.pk %}" class="btn btn-primary">Xem chi tiết</a>
+    <div id="initial-posts-container">
+        <div class="row">
+            {% if post|length == 0 %}
+            <div class="col-12">
+                <h3 class="text-center">There are currently no posts!</h3>
+            </div>
+            {% endif %}
+            {% for p in post %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <img class="card-img-top img-fluid" src="{{ p.ImageURL }}" alt="{{ p.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title {% if p.post_type == 'VIP' %}text-warning{% elif p.post_type == 'Pro' %}text-danger{% else %}text-primary{% endif %}">
+                            {% if p.post_type == 'Normal' %}<i class="fas fa-file-alt"></i>{% endif %}
+                            {% if p.post_type == 'VIP' %}<i class="fas fa-star"></i>{% endif %}
+                            {% if p.post_type == 'Pro' %}<i class="fas fa-trophy"></i></i>{% endif %}
+                            {{ p.title }}
+                        </h5>
+                        <p class="card-text">🏡 {{ p.address }}</p>
+                        <p class="card-text">💰{{ p.formatted_price}}</p>
+                        <a href="{% url 'post_detail' p.pk %}" class="btn btn-primary">See details</a>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
 </div>
+<script>
+$(document).ready(function() {
+    $('input[name="q"]').on('input', function() {
+        var query = $(this).val();
+        $.ajax({
+            url: '{% url "search" %}',
+            data: {
+                'q': query
+            },
+            dataType: 'json',
+            success: function(data) {
+                console.log(data);
+                $('#initial-posts-container').hide();
+                $('.search-result').remove();
+
+                var resultsContainer = $('<div>').addClass('row search-result');
+                if (data.length === 0) {
+                    resultsContainer.append($('<div>').addClass('col-12').append($('<h3>').addClass('text-center').text('No results found')));
+                } else {
+                    $.each(data, function(index, post) {
+                        var postCard = $('<div>').addClass('col-md-6 col-lg-4 mb-4')
+                            .append($('<div>').addClass('card h-100')
+                                .append($('<img>').addClass('card-img-top img-fluid').attr('src', post.image_url).attr('alt', post.title))
+                                .append($('<div>').addClass('card-body')
+                                    .append($('<h5>').addClass('card-title').text(post.title))
+                                    .append($('<p>').addClass('card-text').text('🏡 ' + post.address))
+                                    .append($('<p>').addClass('card-text').text('💰' + post.price))
+                                    .append($('<a>').addClass('btn btn-primary').attr('href', '#').text('See details'))
+                                )
+                            );
+                        resultsContainer.append(postCard);
+                    });
+                }
+                $('.container').append(resultsContainer);
+            }
+        });
+    });
+});
+</script>
 {% endblock %}

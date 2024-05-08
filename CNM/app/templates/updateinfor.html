@@ -63,7 +63,7 @@
                         <small class="text-danger">{{ fm.errors|striptags }}</small>
                     </div>
                     {% endfor %}
-                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="submit" class="btn btn-danger">Update</button>
                     {% if form.non_field_errors %}
                     {% for error in form.non_field_errors %}
                     <p class="alert alert-danger my-3">{{ error }}</p>
