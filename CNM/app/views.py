@@ -114,6 +114,7 @@ class ProfileViews(View):
             phone = form.cleaned_data['phone']
             gender = form.cleaned_data['gender']
             facebook = form.cleaned_data['facebook']
+            image = None
             if 'image' in request.FILES:
                 image = form.cleaned_data['image']
             reg = Profile(user=user, full_name=full_name, email=email, phone=phone, gender=gender, facebook=facebook, image=image)

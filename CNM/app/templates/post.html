@@ -168,6 +168,11 @@ $(document).ready(function() {
                     resultsContainer.append($('<div>').addClass('col-12').append($('<h3>').addClass('text-center').text('No results found')));
                 } else {
                     $.each(data, function(index, post) {
+                        var postUrl = '';
+                        if (post.pk !== undefined) {
+                            postUrl = '{% url "post_detail" 0 %}'.replace('0', post.pk);
+                        }
+
                         var postCard = $('<div>').addClass('col-md-6 col-lg-4 mb-4')
                             .append($('<div>').addClass('card h-100')
                                 .append($('<img>').addClass('card-img-top img-fluid').attr('src', post.image_url).attr('alt', post.title))
@@ -175,13 +180,20 @@ $(document).ready(function() {
                                     .append($('<h5>').addClass('card-title').text(post.title))
                                     .append($('<p>').addClass('card-text').text('🏡 ' + post.address))
                                     .append($('<p>').addClass('card-text').text('💰' + post.price))
-                                    .append($('<a>').addClass('btn btn-primary').attr('href', '#').text('See details'))
+                                    .append($('<a>').addClass('btn btn-primary see-details').attr('href', postUrl).text('See details'))
                                 )
                             );
                         resultsContainer.append(postCard);
                     });
                 }
                 $('.container').append(resultsContainer);
+
+                // Gắn sự kiện click cho tất cả các liên kết "See details"
+                $('.see-details').click(function(e) {
+                    e.preventDefault();
+                    var url = $(this).attr('href');
+                    window.location.href = url;
+                });
             }
         });
     });

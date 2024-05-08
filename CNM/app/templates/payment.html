@@ -1,15 +1,75 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <h2>VPBank</h2>
-    <img src="{% static 'images\104d4f0b-3b32-4a41-9a0f-a91b11bfcfa2.jpg' %}" alt="QR Code 2">
-    <h2>Momo</h2>
-    <img src="{% static 'images\c06a8403-527a-4359-b285-74fafc43ee37.jpg' %}" alt="QR Code 1">
-    <div>
-        <h3>Mô tả nội dung chuyển khoản:</h3>
-        <p>
-            Nạp tiền cho khách hàng XYZ vào tài khoản số [số tài khoản của bạn]
-            với thông điệp: [nội dung bạn muốn ghi chú]
-        </p>
+<style>
+.navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 999;
+}
+
+    /* Body padding */
+body {
+        padding-top: 100px;
+    }
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.card {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.qr-code {
+  max-width: 200px;
+  max-height: 400px;
+  width: 100%;
+  height: auto;
+}
+</style>
+<div class="container">
+  <h1 class="text-center my-4">Transfer Instructions</h1>
+  
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="card-title">VPBank</h5>
+        </div>
+        <div class="card-body text-center">
+          <img src="{% static 'images/104d4f0b-3b32-4a41-9a0f-a91b11bfcfa2.jpg' %}" alt="QR Code 2" class="img-fluid qr-code">
+        </div>
+      </div>
     </div>
+    
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+          <h5 class="card-title">Momo</h5>
+        </div>
+        <div class="card-body text-center">
+          <img src="{% static 'images/c06a8403-527a-4359-b285-74fafc43ee37.jpg' %}" alt="QR Code 1" class="img-fluid qr-code">
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="card">
+    <div class="card-header bg-info text-white">
+      <h5 class="card-title">Transfer content</h5>
+    </div>
+    <div class="card-body">
+      <p>Name - UserName - Email</p>
+    </div>
+  </div>
+</div>
 {% endblock %}

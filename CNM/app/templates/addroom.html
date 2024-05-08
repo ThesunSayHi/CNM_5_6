@@ -15,6 +15,7 @@
     body {
         padding-top: 100px;
         font-family: 'Ubuntu', sans-serif;
+        background-color: #f8f9fa;
     }
 
     .card {
@@ -51,11 +52,28 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         transform: translateY(-2px);
     }
+
+    .note {
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        padding: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .note p {
+        margin-bottom: 0;
+        color: #555;
+        font-style: italic;
+    }
 </style>
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-8">
+            <div class="note">
+                <p>We kindly ask our customers to carefully read through our service fees on the services page and verify if payment has been made into their account before posting</p>
+            </div>
             <div class="card">
                 <div class="card-body">
                     <h1 class="card-title text-center mb-4">Add Room</h1>

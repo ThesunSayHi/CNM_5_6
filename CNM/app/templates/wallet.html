@@ -2,99 +2,118 @@
 {% load static %}
 {% block content %}
 <style>
-    /* Navbar styles */
-    .navbar {
+.navbar {
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
         z-index: 999;
-    }
+}
 
     /* Body padding */
-    body {
+body {
         padding-top: 100px;
     }
 
     /* Card styles */
-    .card {
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    }
+/* Card styles */
+.card {
+  border-radius: 15px;
+  overflow: hidden;
+}
 
-    .card-header {
-        background-color: #007bff;
-        color: #fff;
-        text-align: center;
-        border-bottom: none;
-    }
+.card-header {
+  background: linear-gradient(to right, #007bff, #0056b3);
+  padding: 1.5rem;
+}
 
-    .card-body {
-        padding: 20px;
-    }
+/* Info box styles */
+.info-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-    .card-title {
-        font-size: 1.4rem;
-        font-weight: 700;
-        margin-bottom: 15px;
-    }
+.info-label {
+  color: #6c757d;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
 
-    .card-text {
-        margin-bottom: 10px;
-    }
+.info-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0;
+}
 
-    /* Submit button styles */
-    .btn-primary {
-        background-color: #007bff;
-        border-color: #007bff;
-        font-weight: 500;
-        transition: transform 0.3s ease;
-    }
+/* Button styles */
+.btn-primary {
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
 
-    .btn-primary:hover {
-        background-color: #0056b3;
-        border-color: #0056b3;
-        transform: translateY(-2px);
-    }
-    .buttons {
-        display: flex;
-        align-items: center;
-        margin-top: 30px;
-    }
+.btn-primary::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.2), transparent);
+  transition: all 0.5s ease;
+}
 
-    .buttons .btn {
-        color: #fff;
-        text-decoration: none;
-        margin: 0 10px;
-        padding: 8px 25px;
-        border-radius: 25px;
-        font-size: 16px;
-        white-space: nowrap;
-        background: linear-gradient(to right, #e20d0d, #b71818);
-        transition: background 0.3s ease;
-    }
+.btn-primary:hover::before {
+  left: 100%;
+}
 
-    .buttons .btn:hover {
-        background: linear-gradient(to left, #e20d0d, #b71818);
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    }
+.btn-animated {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 </style>
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Wallet Information</h5>
-                </div>
-                <div class="card-body">
-                    <p><strong>User:</strong> {{ wallet.user }}</p>
-                    <p><strong>account balance</strong> {{ wallet.total_balance }}</p>
-                    <p><strong>Expenses:</strong> {{ wallet.total_expenses }}</p>
-                </div>
-                <div class="buttons">
-                    <a href="/payment" class="btn">Nạp Tiền</a>
-                </div>
-            </div>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card border-0 shadow-lg">
+        <div class="card-header bg-gradient text-white text-center">
+          <h5 class="card-title mb-0" style="color: red;">Wallet Information</h5>
         </div>
+        <div class="card-body">
+          <div class="info-box mb-3">
+            <h6 class="info-label">User</h6>
+            <p class="info-value">{{ wallet.user }}</p>
+          </div>
+          <div class="info-box mb-3">
+            <h6 class="info-label">Account Balance</h6>
+            <p class="info-value">{{ wallet.total_balance }}</p>
+          </div>
+          <div class="info-box mb-4">
+            <h6 class="info-label">Expenses</h6>
+            <p class="info-value">{{ wallet.total_expenses }}</p>
+          </div>
+          <div class="text-center">
+            <a href="/payment" class="btn btn-primary btn-animated px-4">Top up</a>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 {% endblock %}
