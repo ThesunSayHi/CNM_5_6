@@ -130,6 +130,8 @@
                         <p class="card-text">🏡 {{ p.address }}</p>
                         <p class="card-text">💰{{ p.formatted_price}}</p>
                         <a href="{% url 'post_detail' p.pk %}" class="btn btn-primary">See details</a>
+                        <a href="{% url 'delete_post' p.pk %}" class="btn btn-danger">Delete</a>
+                        <a href="#" class="btn btn-success">Update</a>
                     </div>
                 </div>
             </div>

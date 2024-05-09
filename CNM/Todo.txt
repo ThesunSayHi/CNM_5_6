@@ -1,0 +1,1 @@
+Xử lý: Video trong post, upload nhiều post, delete post in your post, Update post in yourpost, chỉnh sua footer 

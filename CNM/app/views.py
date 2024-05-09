@@ -168,8 +168,6 @@ def create_post(request):
             profile = Profile.objects.filter(user=user)
             if not profile:
                 return redirect('profile')
-            if not profile.full_name or not profile.email or not profile.phone:
-                return redirect('profile')
             if post_type == Posts.NORMAL and user.wallet.total_balance< 5000:
                 return redirect('payment')
             elif post_type == Posts.VIP and user.wallet.total_balance < 7000:
@@ -237,3 +235,14 @@ def YourPost(request):
     sorted_posts = sorted(user_posts, key=lambda x: (0 if x.post_type == 'Pro' else (1 if x.post_type == 'VIP' else 2)))
     context = {'posts': sorted_posts}
     return render(request, 'yourpost.html', context)
+
+
+def delete_post(request, pk):
+    post = get_object_or_404(Posts, pk=pk)
+    user_posts = Posts.objects.filter(posted_by=request.user)
+    sorted_posts = sorted(user_posts, key=lambda x: (0 if x.post_type == 'Pro' else (1 if x.post_type == 'VIP' else 2)))
+    context = {'posts': sorted_posts}
+    if request.method == 'POST':
+        post.delete()
+        return redirect('yourpost')
+    return render(request, 'yourpost.html',context)

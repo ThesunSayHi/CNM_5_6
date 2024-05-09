@@ -18,6 +18,7 @@ urlpatterns = [
     path('room/', views.Post_Room, name='room'),
     path('yourpost/', views.YourPost, name='yourpost'),
     path('post/<int:pk>/', views.post_detail_view, name='post_detail'),
+    path('delete/<int:pk>/', views.delete_post, name='delete_post'),
     path('logout/', views.user_logout, name='user_logout'),
     path('profile/', views.ProfileViews.as_view(), name='profile'),
     path('information/', views.information, name='information'),

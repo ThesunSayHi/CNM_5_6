@@ -131,6 +131,7 @@ class Posts(models.Model):
     available = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(null=True, blank=True)
+    video = models.FileField(upload_to='videos', null=True, blank=True)
     images1=models.ImageField(upload_to="images",null=True)
     images2=models.ImageField(upload_to="images",null=True)
     images3=models.ImageField(upload_to="images",null=True)
