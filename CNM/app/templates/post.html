@@ -112,7 +112,7 @@
     background-color: #0056b3;
 }
 </style>
-<form action="#" method="get">
+<form action="" method="get">
     {% csrf_token %}
     <div class="search-box">
         <input type="text" name="q" placeholder="Search here..." value="{{ query }}">
@@ -168,6 +168,10 @@ $(document).ready(function() {
                     resultsContainer.append($('<div>').addClass('col-12').append($('<h3>').addClass('text-center').text('No results found')));
                 } else {
                     $.each(data, function(index, post) {
+                        var postPk = post.pk || '';
+                        console.log(postPk);
+                        var postDetailUrl = "/post/" + postPk + "/";
+                        console.log(postDetailUrl);
                         var postCard = $('<div>').addClass('col-md-6 col-lg-4 mb-4')
                             .append($('<div>').addClass('card h-100')
                                 .append($('<img>').addClass('card-img-top img-fluid').attr('src', post.image_url).attr('alt', post.title))
@@ -175,7 +179,7 @@ $(document).ready(function() {
                                     .append($('<h5>').addClass('card-title').text(post.title))
                                     .append($('<p>').addClass('card-text').text('🏡 ' + post.address))
                                     .append($('<p>').addClass('card-text').text('💰' + post.price))
-                                    .append($('<a>').addClass('btn btn-primary').attr('href', '#').text('See details'))
+                                    .append($('<a>').addClass('btn btn-primary').attr('href', postDetailUrl).text('See details'))
                                 )
                             );
                         resultsContainer.append(postCard);

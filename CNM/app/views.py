@@ -87,8 +87,13 @@ def Post_Room(request):
     return render(request, 'post.html', context)
 
 def post_detail_view(request, pk):
-    post = Posts.objects.get(pk=pk)
-    profile = get_object_or_404(Profile, user=post.posted_by)
+    post = get_object_or_404(Posts, pk=pk)
+    
+    try:
+        profile = Profile.objects.get(user=post.posted_by)
+    except Profile.DoesNotExist:
+        profile = None
+    
     context = {
         'post': post,
         'profile': profile,
@@ -160,6 +165,11 @@ def create_post(request):
             post.posted_by = request.user
             user = request.user
             post_type = form.cleaned_data.get('post_type')
+            profile = Profile.objects.filter(user=user)
+            if not profile:
+                return redirect('profile')
+            if not profile.full_name or not profile.email or not profile.phone:
+                return redirect('profile')
             if post_type == Posts.NORMAL and user.wallet.total_balance< 5000:
                 return redirect('payment')
             elif post_type == Posts.VIP and user.wallet.total_balance < 7000:
@@ -205,6 +215,7 @@ def search_posts(request):
 
     data = [
         {
+            'pk': post.pk,
             'title': post.title,
             'description': post.description,
             'address': post.address,
@@ -213,7 +224,6 @@ def search_posts(request):
         }
         for post in posts
     ]
-
     return JsonResponse(data, safe=False)
 
 
