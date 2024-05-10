@@ -45,10 +45,8 @@
         <div class="description">
           <h4>Contact Info</h4>
           {% if profile %}
-              <p>Full Name: {{ profile.full_name }}</p>
               <p>📧: {{ profile.email }}</p>
               <p>☎: {{ profile.phone }}</p>
-              <p>👥: {{ profile.get_gender_display }}</p>
           {% else %}
               <p>No profile information available.</p>
           {% endif %}
