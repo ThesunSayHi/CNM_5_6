@@ -93,6 +93,11 @@
                             {% endif %}
                         </div>
                         {% endfor %}
+                        <div class="form-group">
+                            <label for="id_images_title" class="form-label">Images</label>
+                            <input type="file" name="images_title" id="id_images_title" class="form-control" multiple>
+                            <small class="form-text text-muted">Select multiple images</small>
+                        </div>
                         <div class="text-center mt-4">
                             <button type="submit" class="btn btn-danger">Submit</button>
                         </div>

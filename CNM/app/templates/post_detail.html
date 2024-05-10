@@ -17,21 +17,9 @@
             </video>
           </div>
           {% endif %}
-          {% if post.images1 %}
-          <div class="slide"><img src="{{ post.images1.url }}" alt=""></div>
-          {% endif %}
-          {% if post.images2 %}
-          <div class="slide"><img src="{{ post.images2.url }}" alt=""></div>
-          {% endif %}
-          {% if post.images3 %}
-          <div class="slide"><img src="{{ post.images3.url }}" alt=""></div>
-          {% endif %}
-          {% if post.images4 %}
-          <div class="slide"><img src="{{ post.images4.url }}" alt=""></div>
-          {% endif %}
-          {% if post.images5 %}
-          <div class="slide"><img src="{{ post.images5.url }}" alt=""></div>
-          {% endif %}
+          {% for image in post.postimage_set.all %}
+          <div class="slide"><img src="{{ image.image.url }}" alt=""></div>
+          {% endfor %}
         </div>
         <i class="fa-solid fa-arrow-right button" id="next"></i>
       </div>

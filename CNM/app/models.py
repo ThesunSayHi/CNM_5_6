@@ -130,13 +130,8 @@ class Posts(models.Model):
     address = models.CharField(max_length=255, null=True, blank=True)
     available = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(null=True, blank=True)
+    images_title = models.ImageField(null=True, blank=True)
     video = models.FileField(upload_to='videos', null=True, blank=True)
-    images1=models.ImageField(upload_to="images",null=True, blank=True)
-    images2=models.ImageField(upload_to="images",null=True, blank=True)
-    images3=models.ImageField(upload_to="images",null=True, blank=True)
-    images4=models.ImageField(upload_to="images",null=True, blank=True)
-    images5=models.ImageField(upload_to="images",null=True, blank=True)
     post_type = models.CharField(max_length=10, choices=POST_TYPE_CHOICES, default=NORMAL)
 
     def __str__(self):
@@ -145,7 +140,7 @@ class Posts(models.Model):
     @property
     def ImageURL(self):
         try:
-            url = self.image.url
+            url = self.images_title.url
         except:
             url = ''
         return url
@@ -154,7 +149,12 @@ class Posts(models.Model):
     def formatted_price(self):
         return format_price(self.price)
 
+class PostImage(models.Model):
+    post = models.ForeignKey(Posts, on_delete=models.CASCADE, default=None)
+    image = models.ImageField(upload_to='images/')
 
+    def __str__(self):
+        return self.post.title
 class Wallet(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='wallet')
     total_balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)

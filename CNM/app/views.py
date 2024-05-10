@@ -88,7 +88,7 @@ def Post_Room(request):
 
 def post_detail_view(request, pk):
     post = get_object_or_404(Posts, pk=pk)
-    
+
     try:
         profile = Profile.objects.get(user=post.posted_by)
     except Profile.DoesNotExist:
@@ -154,6 +154,8 @@ def create_post(request):
                     wallet.total_expenses += 10000
                 wallet.save()
                 post.save()
+                for image in request.FILES.getlist('images_title'):
+                    PostImage.objects.create(post=post, image=image)
                 print("Post saved successfully")
                 return redirect('room')
             except Exception as e:
@@ -241,7 +243,7 @@ def delete_post(request, pk):
     return render(request, 'confirm.html')
 
 
-class updatePost(View):
+class UpdatePost(View):
     def get(self, request, pk):
         post = get_object_or_404(Posts, pk=pk)
         form = PostForm(instance=post)
@@ -255,14 +257,10 @@ class updatePost(View):
             post.price = form.cleaned_data['price']
             post.address = form.cleaned_data['address']
             post.description = form.cleaned_data['description']
-            post.post_type = form.cleaned_data['post_type']
             post.video = form.cleaned_data.get('video')
-            post.image = form.cleaned_data.get('image')
-            post.images1 = form.cleaned_data.get('images1')
-            post.images2 = form.cleaned_data.get('images2')
-            post.images3 = form.cleaned_data.get('images3')
-            post.images4 = form.cleaned_data.get('images4')
-            post.images5 = form.cleaned_data.get('images5')
+            post.images = form.cleaned_data.get('images')
+            if 'post_type' in form.changed_data:
+                post.post_type = form.initial['post_type']
             post.save()
             return redirect('yourpost')
         return render(request, 'updatepost.html', {'form': form})
