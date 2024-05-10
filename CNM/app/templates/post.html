@@ -116,7 +116,7 @@
     {% csrf_token %}
     <div class="search-box">
         <input type="text" name="q" placeholder="Search here..." value="{{ query }}">
-        <button type="submit">Search</button>
+        <button><i class="fas fa-search"></i></button>
     </div>
 </form>
 <div class="container mt-5">
@@ -138,8 +138,8 @@
                             {% if p.post_type == 'Pro' %}<i class="fas fa-trophy"></i></i>{% endif %}
                             {{ p.title }}
                         </h5>
-                        <p class="card-text">🏡 {{ p.address }}</p>
-                        <p class="card-text">💰{{ p.formatted_price}}</p>
+                        <p class="card-text"><i class="fas fa-map-marker-alt"></i> {{ p.address }}</p>
+                        <p class="card-text"><i class="fas fa-money-bill-wave"></i>{{ p.formatted_price}}</p>
                         <a href="{% url 'post_detail' p.pk %}" class="btn btn-primary">See details</a>
                     </div>
                 </div>

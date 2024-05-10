@@ -23,9 +23,10 @@ urlpatterns = [
     path('profile/', views.ProfileViews.as_view(), name='profile'),
     path('information/', views.information, name='information'),
     path('updateinfor/<int:pk>', views.updateInfor.as_view(), name='updateinfor'),
+    path('updatepost/<int:pk>', views.updatePost.as_view(), name='updatepost'),
     path('passwordchange/', auth_view.PasswordChangeView.as_view(template_name='password.html',form_class=MyPasswordChangeForm, success_url = '/passwordchangedone'), name = 'passwordchange'),
     path('passwordchangedone', auth_view.PasswordChangeDoneView.as_view(template_name='passwordchangedone.html'), name = 'passwordchangedone'),
-     path('search/', views.search_posts, name='search'),
+    path('search/', views.search_posts, name='search'),
     path('addroom/', views.create_post, name='addroom'),
     path('wallet/', views.wallet_view, name='wallet_view'),
 

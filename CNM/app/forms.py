@@ -18,32 +18,32 @@ class UserSignupForm(UserCreationForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['full_name', 'email', 'phone', 'gender', 'facebook', 'image']
+        fields = ['full_name', 'email', 'phone', 'gender', 'image']
         widgets = {
             'full_name': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'phone': forms.TextInput(attrs={'class': 'form-control'}),
             'gender': forms.Select(attrs={'class': 'form-control'}),
-            'facebook': forms.URLInput(attrs={'class': 'form-control'}),
             'image': forms.FileInput(attrs={'class': 'form-control'}),
         }
 
 class PostForm(forms.ModelForm):
     class Meta:
         model = Posts
-        fields = ('title', 'price', 'address', 'description', 'image', 'images1', 'images2', 'images3', 'images4', 'images5', 'post_type')
+        fields = ('title', 'price', 'address', 'description','video', 'image', 'images1', 'images2', 'images3', 'images4', 'images5', 'post_type')
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Post title'}),
             'price': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Price'}),
             'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Address'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Description'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Description','rows': 10}),
             'post_type': forms.Select(attrs={'class': 'form-select'}),
+            'video': forms.FileInput(attrs={'class': 'form-control'}),
             'image': forms.FileInput(attrs={'class': 'form-control'}),
-            'images1': forms.FileInput(attrs={'class': 'form-control'}),
-            'images2': forms.FileInput(attrs={'class': 'form-control'}),
-            'images3': forms.FileInput(attrs={'class': 'form-control'}),
-            'images4': forms.FileInput(attrs={'class': 'form-control'}),
-            'images5': forms.FileInput(attrs={'class': 'form-control'}),
+            'images1': forms.FileInput(attrs={'class': 'form-control','required': False}),
+            'images2': forms.FileInput(attrs={'class': 'form-control','required': False}),
+            'images3': forms.FileInput(attrs={'class': 'form-control','required': False}),
+            'images4': forms.FileInput(attrs={'class': 'form-control','required': False}),
+            'images5': forms.FileInput(attrs={'class': 'form-control','required': False}),
         }
 
 class MyPasswordChangeForm(PasswordChangeForm):

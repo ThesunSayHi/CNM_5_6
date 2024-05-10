@@ -1,0 +1,78 @@
+{% extends 'home.html' %} 
+{% load static %} 
+{% block content %}
+<style>
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 999;
+    }
+
+    body {
+        padding-top: 100px;
+        font-family: 'Ubuntu', sans-serif;
+    }
+
+    .update-profile {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 40px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+    }
+
+    .update-profile h3 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .update-profile label {
+        font-weight: bold;
+    }
+
+    .update-profile input,
+    .update-profile textarea {
+        border-radius: 4px;
+        padding: 10px;
+    }
+
+    .update-profile .btn-primary {
+        display: block;
+        width: 100%;
+    }
+
+    .update-profile .alert-danger {
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="update-profile">
+                <h3>Update Post</h3>
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for fm in form %}
+                    <div class="form-group">
+                        {{ fm.label_tag }}
+                        {{ fm }}
+                        <small class="text-danger">{{ fm.errors|striptags }}</small>
+                    </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-danger">Update</button>
+                    {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                    <p class="alert alert-danger my-3">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

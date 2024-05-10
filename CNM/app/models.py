@@ -90,7 +90,6 @@ class Profile(models.Model):
     email = models.EmailField(unique=True, null=True)
     phone = models.CharField(max_length=100, null=True, blank=True)
     gender = models.CharField(max_length=20, choices=GENDER, default="Other")
-    facebook = models.URLField(null=True, blank=True)
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
@@ -113,6 +112,7 @@ import locale
 locale.setlocale(locale.LC_ALL, 'vi_VN.UTF-8')
 def format_price(price):
     return locale.currency(price, grouping=True)
+
 class Posts(models.Model):
     NORMAL = 'Normal'
     VIP = 'VIP'
@@ -124,7 +124,7 @@ class Posts(models.Model):
     ]
 
     posted_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
-    description = models.TextField(max_length=500, null=True, blank=True)
+    description = models.TextField(max_length=5000, null=True, blank=True)
     title = models.CharField(max_length=200, null=True)
     price = models.DecimalField(max_digits=15, decimal_places=2)
     address = models.CharField(max_length=255, null=True, blank=True)
@@ -132,11 +132,11 @@ class Posts(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(null=True, blank=True)
     video = models.FileField(upload_to='videos', null=True, blank=True)
-    images1=models.ImageField(upload_to="images",null=True)
-    images2=models.ImageField(upload_to="images",null=True)
-    images3=models.ImageField(upload_to="images",null=True)
-    images4=models.ImageField(upload_to="images",null=True)
-    images5=models.ImageField(upload_to="images",null=True)
+    images1=models.ImageField(upload_to="images",null=True, blank=True)
+    images2=models.ImageField(upload_to="images",null=True, blank=True)
+    images3=models.ImageField(upload_to="images",null=True, blank=True)
+    images4=models.ImageField(upload_to="images",null=True, blank=True)
+    images5=models.ImageField(upload_to="images",null=True, blank=True)
     post_type = models.CharField(max_length=10, choices=POST_TYPE_CHOICES, default=NORMAL)
 
     def __str__(self):
@@ -173,3 +173,8 @@ class Wallet(models.Model):
     @property
     def remaining_balance(self):
         return self.total_balance
+    @property
+    def formatted_price_blance(self):
+        return format_price(self.total_balance)
+    def formatted_price_expenses(self):
+        return format_price(self.total_expenses)

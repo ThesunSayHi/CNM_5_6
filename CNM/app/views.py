@@ -118,45 +118,12 @@ class ProfileViews(View):
             email = form.cleaned_data['email']
             phone = form.cleaned_data['phone']
             gender = form.cleaned_data['gender']
-            facebook = form.cleaned_data['facebook']
-            image = None
-            if 'image' in request.FILES:
-                image = form.cleaned_data['image']
-            reg = Profile(user=user, full_name=full_name, email=email, phone=phone, gender=gender, facebook=facebook, image=image)
+            image = form.cleaned_data['image']
+            reg = Profile(user=user, full_name=full_name, email=email, phone=phone, gender=gender, image = image)
             reg.save()
             return redirect('information')
         else:
             return render(request, 'profile.html', {'form': form})
-def information(request):
-    profiles =  Profile.objects.filter(user=request.user)
-    return render(request,'information.html', locals())
-
-class updateInfor(View):
-    def get(self, request, pk):
-        profile = get_object_or_404(Profile, pk=pk)
-        form = ProfileForm(instance=profile)
-        return render(request, 'updateinfor.html', {'form': form})
-
-    def post(self, request, pk):
-        profile = get_object_or_404(Profile, pk=pk)
-        form = ProfileForm(request.POST, request.FILES, instance=profile)
-        if form.is_valid():
-            if form.cleaned_data['full_name'] != '':
-                profile.full_name = form.cleaned_data['full_name']
-            if form.cleaned_data['email'] != '':
-                profile.email = form.cleaned_data['email']
-            if form.cleaned_data['phone'] != '':
-                profile.phone = form.cleaned_data['phone']
-            if form.cleaned_data['gender'] != '':
-                profile.gender = form.cleaned_data['gender']
-            if form.cleaned_data['facebook'] != '':
-                profile.facebook = form.cleaned_data['facebook']
-            if form.cleaned_data.get('image'):
-                profile.image = form.cleaned_data['image']
-            profile.save()
-        return redirect('information')
-
-
 def create_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
@@ -196,6 +163,35 @@ def create_post(request):
     else:
         form = PostForm()
     return render(request, 'addroom.html', {'form': form})
+def information(request):
+    profiles =  Profile.objects.filter(user=request.user)
+    return render(request,'information.html', locals())
+
+class updateInfor(View):
+    def get(self, request, pk):
+        profile = get_object_or_404(Profile, pk=pk)
+        form = ProfileForm(instance=profile)
+        return render(request, 'updateinfor.html', {'form': form})
+
+    def post(self, request, pk):
+        profile = get_object_or_404(Profile, pk=pk)
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            if form.cleaned_data['full_name'] != '':
+                profile.full_name = form.cleaned_data['full_name']
+            if form.cleaned_data['email'] != '':
+                profile.email = form.cleaned_data['email']
+            if form.cleaned_data['phone'] != '':
+                profile.phone = form.cleaned_data['phone']
+            if form.cleaned_data['gender'] != '':
+                profile.gender = form.cleaned_data['gender']
+            if form.cleaned_data.get('image'):
+                profile.image = form.cleaned_data['image']
+            profile.save()
+        return redirect('information')
+
+
+
 
 from django.db.models import Q
 from django.http import JsonResponse
@@ -239,10 +235,34 @@ def YourPost(request):
 
 def delete_post(request, pk):
     post = get_object_or_404(Posts, pk=pk)
-    user_posts = Posts.objects.filter(posted_by=request.user)
-    sorted_posts = sorted(user_posts, key=lambda x: (0 if x.post_type == 'Pro' else (1 if x.post_type == 'VIP' else 2)))
-    context = {'posts': sorted_posts}
     if request.method == 'POST':
         post.delete()
         return redirect('yourpost')
-    return render(request, 'yourpost.html',context)
+    return render(request, 'confirm.html')
+
+
+class updatePost(View):
+    def get(self, request, pk):
+        post = get_object_or_404(Posts, pk=pk)
+        form = PostForm(instance=post)
+        return render(request, 'updatepost.html', {'form': form})
+
+    def post(self, request, pk):
+        post = get_object_or_404(Posts, pk=pk)
+        form = PostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            post.title = form.cleaned_data['title']
+            post.price = form.cleaned_data['price']
+            post.address = form.cleaned_data['address']
+            post.description = form.cleaned_data['description']
+            post.post_type = form.cleaned_data['post_type']
+            post.video = form.cleaned_data.get('video')
+            post.image = form.cleaned_data.get('image')
+            post.images1 = form.cleaned_data.get('images1')
+            post.images2 = form.cleaned_data.get('images2')
+            post.images3 = form.cleaned_data.get('images3')
+            post.images4 = form.cleaned_data.get('images4')
+            post.images5 = form.cleaned_data.get('images5')
+            post.save()
+            return redirect('yourpost')
+        return render(request, 'updatepost.html', {'form': form})

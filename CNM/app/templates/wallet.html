@@ -2,124 +2,140 @@
 {% load static %}
 {% block content %}
 <style>
-.navbar {
+    /* Navbar styles */
+    .navbar {
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
         z-index: 999;
-}
+    }
 
     /* Body padding */
-body {
+    body {
         padding-top: 100px;
         font-family: 'Ubuntu', sans-serif;
-
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
     }
 
     /* Card styles */
-/* Card styles */
-.card {
-  border-radius: 15px;
-  overflow: hidden;
-}
+    .card {
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
 
-.card-header {
-  background: linear-gradient(to right, #007bff, #0056b3);
-  padding: 1.5rem;
-}
+    .card-header {
+        background: linear-gradient(to right, #007bff, #0056b3);
+        padding: 1.5rem;
+        color: #fff;
+    }
 
-/* Info box styles */
-.info-box {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+    /* Info box styles */
+    .info-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem;
+        border-bottom: 1px solid #e9ecef;
+    }
 
-.info-label {
-  color: #6c757d;
-  font-weight: 600;
-  text-transform: uppercase;
-  font-size: 0.9rem;
-  margin-bottom: 0;
-}
+    .info-label {
+        color: #6c757d;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        margin-bottom: 0;
+    }
 
-.info-value {
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin-bottom: 0;
-}
+    .info-value {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 0;
+    }
 
-/* Button styles */
-.btn-primary {
-  font-weight: 600;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
+    /* Button styles */
+    .btn-primary {
+        font-weight: 600;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
 
-.btn-primary::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to right, rgba(255, 255, 255, 0.2), transparent);
-  transition: all 0.5s ease;
-}
+    .btn-primary::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to right, rgba(255, 255, 255, 0.2), transparent);
+        transition: all 0.5s ease;
+    }
 
-.btn-primary:hover::before {
-  left: 100%;
-}
+    .btn-primary:hover::before {
+        left: 100%;
+    }
 
-.btn-animated {
-  animation: pulse 2s infinite;
-}
+    .btn-animated {
+        animation: pulse 2s infinite;
+    }
 
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    /* Footer styles */
+    footer {
+        background-color: #111;
+        color: #fff;
+        padding: 1rem;
+        margin-top: auto;
+    }
 </style>
 
 <div class="container py-5">
-  <div class="row justify-content-center">
-    <div class="col-lg-6">
-      <div class="card border-0 shadow-lg">
-        <div class="card-header bg-gradient text-white text-center">
-          <h5 class="card-title mb-0" style="color: red;">Wallet Information</h5>
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-0">
+                <div class="card-header bg-gradient text-white text-center">
+                    <h5 class="card-title mb-0" style="color: red;">Wallet Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="info-box">
+                        <h6 class="info-label">User</h6>
+                        <p class="info-value">{{ wallet.user }}</p>
+                    </div>
+                    <div class="info-box">
+                        <h6 class="info-label">FullName</h6>
+                        <p class="info-value">{{ wallet.user.full_name }}</p>
+                    </div>
+                    <div class="info-box">
+                        <h6 class="info-label">Account Balance</h6>
+                        <p class="info-value">{{ wallet.formatted_price_blance}}</p>
+                    </div>
+                    <div class="info-box">
+                        <h6 class="info-label">Expenses</h6>
+                        <p class="info-value">{{ wallet.formatted_price_expenses}}</p>
+                    </div>
+                    <div class="text-center mt-4">
+                        <a href="/payment" class="btn btn-primary btn-animated px-4">Top up</a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-          <div class="info-box mb-3">
-            <h6 class="info-label">User</h6>
-            <p class="info-value">{{ wallet.user }}</p>
-          </div>
-          <div class="info-box mb-3">
-            <h6 class="info-label">FullName</h6>
-            <p class="info-value">{{ wallet.user.full_name }}</p>
-          </div>
-          <div class="info-box mb-3">
-            <h6 class="info-label">Account Balance</h6>
-            <p class="info-value">{{ wallet.total_balance }}</p>
-          </div>
-          <div class="info-box mb-4">
-            <h6 class="info-label">Expenses</h6>
-            <p class="info-value">{{ wallet.total_expenses }}</p>
-          </div>
-          <div class="text-center">
-            <a href="/payment" class="btn btn-primary btn-animated px-4">Top up</a>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
 </div>
+
 {% endblock %}

@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
 
     .navbar {
         position: fixed;
@@ -22,7 +22,7 @@
         border: none;
         border-radius: 10px;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .card:hover {
@@ -59,7 +59,7 @@
         background-color: #007bff;
         border-color: #007bff;
         font-weight: 500;
-        transition: transform 0.3s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
@@ -69,53 +69,60 @@
         transform: translateY(-2px);
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     }
+
     .search-box {
-    display: flex;
-    align-items: center;
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 10px;
-    border-radius: 30px;
-    background-color: #fff;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
-}
+        display: flex;
+        align-items: center;
+        max-width: 600px;
+        margin: 0 auto 30px;
+        padding: 10px;
+        border-radius: 30px;
+        background-color: #fff;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease;
+    }
 
-.search-box:hover {
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
-}
+    .search-box:hover {
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+    }
 
-.search-box input {
-    flex: 1;
-    border: none;
-    outline: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: 500;
-    background-color: transparent;
-}
+    .search-box input {
+        flex: 1;
+        border: none;
+        outline: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: 500;
+        background-color: transparent;
+    }
 
-.search-box button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    outline: none;
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
+    .search-box button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        outline: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
 
-.search-box button:hover {
-    background-color: #0056b3;
-}
+    .search-box button:hover {
+        background-color: #0056b3;
+    }
+    footer {
+        background-color: #111;
+        color: #fff;
+        padding: 1rem;
+        margin-top: auto;
+    }
 </style>
 <div class="container mt-5">
     <div id="initial-posts-container">
         <div class="row">
-            <h2>Posts you have posted to the web</h2>
+            <h2 class="mb-4 text-center">Posts you have posted to the web</h2>
             {% for p in posts %}
             <div class="col-md-6 col-lg-4 mb-4">
                 <div class="card h-100">
@@ -127,11 +134,12 @@
                             {% if p.post_type == 'Pro' %}<i class="fas fa-trophy"></i></i>{% endif %}
                             {{ p.title }}
                         </h5>
-                        <p class="card-text">🏡 {{ p.address }}</p>
-                        <p class="card-text">💰{{ p.formatted_price}}</p>
-                        <a href="{% url 'post_detail' p.pk %}" class="btn btn-primary">See details</a>
-                        <a href="{% url 'delete_post' p.pk %}" class="btn btn-danger">Delete</a>
-                        <a href="#" class="btn btn-success">Update</a>
+                        <p class="card-text"><i class="fas fa-map-marker-alt"></i> {{ p.address }}</p>
+                        <p class="card-text"><i class="fas fa-money-bill-wave"></i> {{ p.formatted_price}}</p>
+                        <div class="d-flex justify-content-center">
+                            <a href="{% url 'delete_post' p.pk %}" class="btn btn-danger mr-2">Delete</a>
+                            <a href="{% url 'updatepost' pk=p.id %}" class="btn btn-success">Update</a>
+                        </div>
                     </div>
                 </div>
             </div>

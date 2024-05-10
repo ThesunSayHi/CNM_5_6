@@ -10,6 +10,13 @@
       <i class="fa-solid fa-arrow-left button" id="prev"></i>
       <div class="image-container">
         <div class="carousel">
+          {% if post.video %}
+          <div class="slide">
+            <video class="slide-video" controls>
+              <source src="{{ post.video.url }}" type="video/mp4">
+            </video>
+          </div>
+          {% endif %}
           {% if post.images1 %}
           <div class="slide"><img src="{{ post.images1.url }}" alt=""></div>
           {% endif %}
@@ -38,7 +45,7 @@
       <div class="post-details">
         <h2>{{ post.title }}</h2>
         <p>Posted by: {{ post.posted_by.username }}</p>
-        <p>Price: {{ post.price }} VND</p>
+        <p>Price: {{ post.formatted_price }} VND</p>
         <p>Address: {{ post.address }}</p>
         <p>Available: {{ post.available|yesno:"Yes,No" }}</p>
         <p>Post Type: {{ post.get_post_type_display }}</p>
@@ -54,7 +61,6 @@
               <p>📧: {{ profile.email }}</p>
               <p>☎: {{ profile.phone }}</p>
               <p>👥: {{ profile.get_gender_display }}</p>
-              <p>Facebook: {{profile.facebook }}</p>
           {% else %}
               <p>No profile information available.</p>
           {% endif %}
@@ -174,30 +180,51 @@
     font-weight: 700;
     margin-bottom: 10px;
   }
+  .slide-video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
 </style>
 <script>
-  const wrapper = document.querySelector(".wrapper"),
-  carousel = document.querySelector(".carousel"),
-  images = document.querySelectorAll(".slide"),
-  buttons = document.querySelectorAll(".button");
-let imageIndex = 0,
-  intervalId;
-const autoSlide = () => {
-  intervalId = setInterval(() => slideImage(++imageIndex), 2000);
-};
-autoSlide();
-const slideImage = () => {
-  imageIndex = imageIndex === images.length ? 0 : imageIndex < 0 ? images.length - 1 : imageIndex;
-  carousel.style.transform = `translateX(-${imageIndex * 100}%)`;
-};
-const updateClick = (e) => {
-  clearInterval(intervalId);
-  imageIndex += e.target.id === "next" ? 1 : -1;
-  slideImage(imageIndex);
-  autoSlide();
-};
-buttons.forEach((button) => button.addEventListener("click", updateClick));
-wrapper.addEventListener("mouseover", () => clearInterval(intervalId));
-wrapper.addEventListener("mouseleave", autoSlide);
+ const wrapper = document.querySelector(".wrapper"),
+    carousel = document.querySelector(".carousel"),
+    slides = document.querySelectorAll(".slide"),
+    buttons = document.querySelectorAll(".button");
+  let slideIndex = 0;
+
+  const showSlide = (index) => {
+    slideIndex = (index + slides.length) % slides.length;
+    slides.forEach((slide, i) => {
+      if (i === slideIndex) {
+        slide.style.display = "block";
+        const video = slide.querySelector("video");
+        if (video) {
+          video.play();
+        }
+      } else {
+        slide.style.display = "none";
+        const video = slide.querySelector("video");
+        if (video) {
+          video.pause();
+          video.currentTime = 0;
+        }
+      }
+    });
+  };
+
+  const nextSlide = () => {
+    showSlide(slideIndex + 1);
+  };
+
+  const prevSlide = () => {
+    showSlide(slideIndex - 1);
+  };
+
+  buttons.forEach((button) =>
+    button.addEventListener("click", button.id === "next" ? nextSlide : prevSlide)
+  );
+
+  showSlide(0);
 </script>
 {% endblock %}

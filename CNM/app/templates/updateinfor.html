@@ -55,7 +55,7 @@
         <div class="col-md-8 offset-md-2">
             <div class="update-profile">
                 <h3>Update Profile</h3>
-                <form action="" method="post">
+                <form action="" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     {% for fm in form %}
                     <div class="form-group">
