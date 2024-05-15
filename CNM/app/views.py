@@ -205,7 +205,8 @@ def search_posts(request):
             Q(title__icontains=query) |
             Q(description__icontains=query) |
             Q(address__icontains=query) |
-            Q(post_type__icontains=query)
+            Q(post_type__icontains=query)|
+            Q(price__icontains=query)
         )
     else:
         posts = Posts.objects.all()
