@@ -38,6 +38,7 @@ def contact(request):
         Form: {}
         '''.format(data['message'], data['email'])
         send_mail(data['subject'], message, '',['quoctoan040501@gmail.com'])
+        messages.success(request, 'The email has been sent successfully')
     return render(request, "contact.html", {})
 
 def teams(request):
@@ -81,8 +82,8 @@ def signup(request):
         return render(request, 'signup.html', context=context)
     
 def Post_Room(request):
-    posts = Posts.objects.all()
-    sorted_posts = sorted(posts, key=lambda x: (0 if x.post_type == 'Pro' else (1 if x.post_type == 'VIP' else 2)))
+    posts = Posts.objects.filter(is_deleted=False)
+    sorted_posts = sorted(posts, key=lambda x: (0 if x.post_type == 'Pro' else (1 if x.post_type == 'VIP' else 2), x.price))
     context = {'post': sorted_posts}
     return render(request, 'post.html', context)
 
@@ -225,11 +226,12 @@ def search_posts(request):
 
 def wallet_view(request):
     user_wallet = Wallet.objects.get(user=request.user)
-    return render(request, 'wallet.html', {'wallet': user_wallet})
+    user_posts = Posts.objects.filter(posted_by=request.user)
+    return render(request, 'wallet.html', {'wallet': user_wallet, 'user_posts': user_posts})
 
 
 def YourPost(request):
-    user_posts = Posts.objects.filter(posted_by=request.user)
+    user_posts = Posts.objects.filter(posted_by=request.user, is_deleted=False)
     sorted_posts = sorted(user_posts, key=lambda x: (0 if x.post_type == 'Pro' else (1 if x.post_type == 'VIP' else 2)))
     context = {'posts': sorted_posts}
     return render(request, 'yourpost.html', context)
@@ -238,7 +240,8 @@ def YourPost(request):
 def delete_post(request, pk):
     post = get_object_or_404(Posts, pk=pk)
     if request.method == 'POST':
-        post.delete()
+        post.is_deleted = True
+        post.save()
         return redirect('yourpost')
     return render(request, 'confirm.html')
 

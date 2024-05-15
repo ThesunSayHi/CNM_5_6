@@ -4,29 +4,26 @@
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
 
-    .navbar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 999;
-    }
-
     body {
-        padding-top: 100px;
-        font-family: 'Ubuntu', sans-serif;
+        font-family: 'Ubuntu';
         background-color: #f8f9fa;
+        padding-top: 80px;
     }
 
     .container {
-        max-width: 800px;
-        margin: 0 auto;
+        max-width: 960px;
+        margin: auto;
     }
 
     .card {
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         transition: all 0.3s ease-in-out;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 100%;
+        max-width: 300px; /* Điều chỉnh chiều rộng của thẻ */
     }
 
     .card:hover {
@@ -41,6 +38,7 @@
         color: #fff;
         padding: 1rem;
         text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        text-align: center;
     }
 
     .card-title {
@@ -48,11 +46,20 @@
         margin-bottom: 0;
     }
 
-    .qr-code {
-        max-width: 200px;
-        max-height: 400px;
+    .qr-code-container {
         width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 250px; /* Thiết lập chiều cao cố định cho vùng chứa ảnh QR code */
+        margin-bottom: 1rem;
+    }
+
+    .qr-code {
+        max-width: 100%;
+        max-height: 100%;
         height: auto;
+        width: auto;
         transition: all 0.3s ease-in-out;
     }
 
@@ -62,12 +69,18 @@
 
     .card-body {
         padding: 2rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
 
     .card-body p {
         font-size: 1.2rem;
         font-weight: 500;
-        margin-bottom: 0;
+        margin-bottom: 0.5rem;
+        text-align: center;
     }
 
     .important {
@@ -75,49 +88,85 @@
         font-weight: 700;
         text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     }
+
+    @media (max-width: 767.98px) {
+        .card-body {
+            padding: 1rem;
+        }
+
+        .card-body p {
+            font-size: 1rem;
+        }
+    }
+
+    .row {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .col-md-6, .col-lg-4 {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
 </style>
 
 <div class="container">
     <h1 class="text-center my-4">Transfer Instructions</h1>
+    <h4>Please wait 3-5 minutes for us to update the money to your account!</h4>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 col-lg-4 d-flex align-items-stretch">
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="card-title">VPBank</h5>
                 </div>
                 <div class="card-body text-center">
-                    <img src="{% static 'images/104d4f0b-3b32-4a41-9a0f-a91b11bfcfa2.jpg' %}" alt="QR Code 2" class="img-fluid qr-code">
+                    <div class="qr-code-container">
+                        <img src="{% static 'images/104d4f0b-3b32-4a41-9a0f-a91b11bfcfa2.jpg' %}" alt="QR Code 2"
+                             class="qr-code">
+                    </div>
+                    <h3>Bank</h3>
+                    <p>Account Owner: Đặng Quốc Toàn</p>
+                    <p>Account number: 1050385721588</p>
+                    <p>Bank: Ngân hàng TMCP Việt Nam Thịnh Vượng (VPBank)</p>
+                    <p class="important">Transfer content: UyenToan - UserName - Phone - Email</p>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 col-lg-4 d-flex align-items-stretch">
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="card-title">Momo</h5>
                 </div>
                 <div class="card-body text-center">
-                    <img src="{% static 'images/c06a8403-527a-4359-b285-74fafc43ee37.jpg' %}" alt="QR Code 1" class="img-fluid qr-code">
+                    <div class="qr-code-container">
+                        <img src="{% static 'images/c06a8403-527a-4359-b285-74fafc43ee37.jpg' %}" alt="QR Code 1"
+                             class="qr-code">
+                    </div>
+                    <h3>Momo</h3>
+                    <p>Account Owner: Đặng Quốc Toàn</p>
+                    <p>Account number: 0385721588</p>
+                    <p class="important">Transfer content: UyenToan - UserName - Phone - Email</p>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 col-lg-4 d-flex align-items-stretch">
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="card-title">Zalo Connect</h5>
                 </div>
                 <div class="card-body text-center">
-                    <img src="{% static 'images/1c1bb2a7-d399-4dce-bed3-a8a262d1f84f.jpg' %}" alt="QR Code 3" class="img-fluid qr-code">
+                    <div class="qr-code-container">
+                        <img src="{% static 'images/1c1bb2a7-d399-4dce-bed3-a8a262d1f84f.jpg' %}" alt="QR Code 3"
+                             class="qr-code">
+                    </div>
+                    <h3>Zalo</h3>
+                    <p>Account Owner: Đặng Quốc Toàn</p>
+                    <p>Phone: 0385721588</p>
+                    <p>You can connect with me on zalo if you have problems or call the hotline: 0385721588 for support.</p>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-header">
-            <h5 class="card-title important">Transfer content</h5>
-        </div>
-        <div class="card-body">
-            <p class="important">Name - UserName - Email</p>
-            <p>example: DangQuocToan - admin - quoctoan040501@gmai.com</p>
         </div>
     </div>
 </div>
